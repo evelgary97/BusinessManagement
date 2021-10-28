@@ -1,0 +1,72 @@
+{% extends 'baselist.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'product/js/CRUD.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'product/css/mystyle.css' %}">
+
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'lib/bootstrap-select/bootstrap-select.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-select/bootstrap-select.min.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'lib/datatables-1.10.20/plugins/ColReorder-1.5.4/css/colReorder.bootstrap4.min.css' %}">
+    <script src="{% static 'lib/datatables-1.10.20/plugins/ColReorder-1.5.4/js/dataTables.colReorder.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/ColReorder-1.5.4/js/colReorder.bootstrap4.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'lib/html2canvas.min.js' %}"></script>
+{% endblock %}
+
+{% block search %}
+
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 10%;" class="w3-center">Stock</th>
+        <th scope="col" style="width: 20%;cursor: pointer">Name</th>
+        <th scope="col" style="width: 20%;">Category</th>
+        <th scope="col" style="width: 15%;" class="w3-center">Image</th>
+        <th scope="col" style="width: 15%;" class="w3-center">Price</th>
+        <th scope="col" style="width: 20%;" class="w3-center">Options</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block modal_form %}
+{#    {% include 'modal.html' %}#}
+    {% include 'product/modal_form.html' %}
+    {% include 'product/modal_detail.html' %}
+    {% include 'product/modal_cat.html' %}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+      {% if form.errors %}
+        let errors = '';
+        {% for field in form %}
+          {% for error in field.errors %}
+            errors += '{{ error }}\n';
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+          errors += '{{ error }}\n';
+        {% endfor %}
+
+        Swal.fire({
+          title: 'Error',
+          text: errors,
+          icon: 'error'
+        });
+      {% endif %}
+
+      let ent = '{{ entity }}',
+        defaultTitleModal = `<b><i class="mdi mdi-plus-circle-outline"></i> New ${ent}</b>`
+
+    </script>
+{% endblock %}

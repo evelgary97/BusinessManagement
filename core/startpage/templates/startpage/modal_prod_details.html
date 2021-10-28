@@ -1,0 +1,40 @@
+{% load static %}
+<!--    modal-->
+<div class="modal fade modal-card " id="prodDetails" tabindex="-1" role="dialog" aria-labelledby="prodDetails"
+     aria-hidden="true" style="min-width: 350px;height: auto;padding: 0" data-target="#prodDetails">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable modal" role="document">
+        <div class="modal-content circular border-0 shadow-none">
+            <div class="modal-header border-bottom-0 circular-top py-2">
+                <h5 class="modal-title user-select-none">
+                    <img src="{% static 'img/logo-lg-red-black.png' %}"
+                         alt="TechnoSTAR Logo"
+                         style="margin-left: .4rem;" width="120" height="50">
+                </h5>
+                <button type="button" class="btn-close mt-2" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="modal-body p-0 circular-bottom bg-light">
+                <div class="img-fluid imgProdDetails" style="background: url('{% static 'img/empty.png' %}')"></div>
+
+                <div class="card-body circular">
+                    <h5 class="card-title name"><b>Name</b></h5>
+                    <br>
+                    <span class="card-text stock"> Stock: 6</span>
+                    <p class="card-text text-justify desc text-muted">Lorem ipsum dolor sit amet, consectetur
+                        adipisicing elit.
+                        Delectus
+                    </p>
+                    <div>
+                        <span class="cart-text price text-lg"><b>123</b> CUP</span>
+                        <button name="a" class="btn prod-id bg-gradient-orange text-white circular float-right">
+                            <i class="mdi mdi-cart-plus"></i>
+                            <div class="d-inline-block">Add to cart</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,345 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap.min.css' %}">
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+    <script src="{% static 'lib/highcharts-8.1.2/highcharts.js' %}"></script>
+    <script src="{% static 'lib/highcharts-8.1.2/modules/exporting.js' %}"></script>
+    <script src="{% static 'lib/highcharts-8.1.2/modules/export-data.js' %}"></script>
+    <script src="{% static 'lib/highcharts-8.1.2/modules/accessibility.js' %}"></script>
+    <script src="{% static 'lib/jquery-ui/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'dashboard/lib/select2/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/lib/select2/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'dashboard/lib/select2/js/select2.full.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/chars.js' %}"></script>
+    <script src="{% static 'dashboard/js/todo_list.js' %}"></script>
+   {% comment %} <script type="text/javascript">
+      $(document).on('ready', function () {
+        $(window).on('scroll', function () {
+          if ($(this).scrollTop() > 100) {
+            $('#scroll').fadeIn();
+          } else {
+            $('#scroll').fadeOut();
+          }
+        });
+        $('#scroll').on('click', function () {
+          $("html, body").animate({scrollTop: 0}, 600);
+          return false;
+        });
+      })
+    </script>{% endcomment %}
+
+{% endblock %}
+
+{% block content %}
+{#    <a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: none;">Top<span></span></a>#}
+    <div class="container-fluid">
+        <div class="row">
+            <div class=" col-md-7 col-12">
+                {% include 'dashboard/todo_list.html' %}
+            </div>
+            <div class="col-md-5 col-12">
+                <div class="card card-widget widget-user circular">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header text-white circular-top"
+                         style="background: url('{{ request.user.userprofile.get_image }}') center center;background-size: cover;">
+                        <h3 class="widget-user-username text-right">{{ request.user.get_full_name }}</h3>
+                        <h5 class="widget-user-desc text-right">{{ user.userprofile.skill }}</h5>
+                        <h5 class="widget-user-desc text-right">{{ user.userprofile.reputation }} <i
+                                class="mdi mdi-star"></i></h5>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-circle" src="{{ request.user.get_image }}" style="height: 85px"
+                             alt="User Avatar">
+                    </div>
+                    <div class="card-footer circular-bottom">
+                        <div class="row">
+                            <div class="col-sm-4 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{ total_sales }}</h5>
+                                    <span class="description-text">SALES</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header" task="my_tasks">{{ my_tasks }}</h5>
+                                    <span class="description-text">TASKS</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{ prods_added }}</h5>
+                                    <span class="description-text">PRODUCTS</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card circular ">
+                    <div class="card-header">
+                        <h3 class="card-title">Last Added Products</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="mdi mdi-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="mdi mdi-close"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            {% for product in last_products %}
+                                <li class="item detail cursor-pointer" id="{{ product.id }}">
+                                    <div class="product-img">
+                                        <img src="{{ product.get_image }}" alt="Product Image" class="img-size-50"
+                                             style="border-radius: .7rem">
+                                    </div>
+                                    <div class="product-info">
+                                        <span class="product-title cursor-pointer">{{ product.name }}</span>
+                                        <span class="badge badge-warning circular float-right">${{ product.s_price }}</span></span>
+                                        <span class="product-description">{{ product.get_desc }}</span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer text-center circular-bottom">
+                        <a href="{% url 'main:product_list' %}" target="_blank"
+                           class="uppercase btn btn-outline-primary circular btn-sm">View
+                            All Products</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card circular ">
+                    <div class="card-header">
+                        <h3 class="card-title">Latest Users</h3>
+
+                        <div class="card-tools">
+                            <span class="badge badge-danger circular">{{ users_count }} New Users</span>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="mdi mdi-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="mdi mdi-close"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0 circular">
+                        <ul class="users-list clearfix">
+                            {% for user in get_users %}
+                                <li>
+                                    <img src="{{ user.get_image }}" alt="User image"
+                                         style="width: 60px;height: 60px">
+                                    <a class="users-list-name" href="#">{{ user.get_full_name }}</a>
+                                    <span class="users-list-date">{{ user.get_short_login_date }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- /.users-list -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer text-center circular-bottom">
+                        <a href="{% url 'user:user_list' %}" class="btn btn-outline-primary circular btn-sm"
+                           target="_blank">View All Users</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card circular ">
+                    <div class="card-header">
+                        <h3 class="card-title">Last orders at home</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="mdi mdi-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="mdi mdi-close"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            {% for sale in sales_at_home %}
+                                <li class="item detail-cart cursor-pointer" id="{{ sale.id }}">
+                                    <div class="product-info ml-2">
+                                        <span class="product-title cursor-pointer">{{ sale.id }} {{ sale.cli_name }} | ${{ sale.total }}</span>
+                                        <span class="badge badge-{% if sale.status == 'Pending' %}warning {% else %}info{% endif %}
+                                         circular float-right">{{ sale.status }}</span>
+                                        <span class="product-description">{{ sale.cli_addr }} ({{ sale.date_joined }})</span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer text-center circular-bottom">
+                        <a href="{% url 'startpage:cart_list' %}" target="_blank"
+                           class="uppercase btn btn-outline-primary circular btn-sm">View
+                            All Sales Online</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="container"></div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="container-pie"></div>
+            </div>
+        </div>
+        <br>
+    </div>
+    {% include 'startpage/modal_prod_details.html' %}
+
+    <div class="modal fade" id="myModalDet" tabindex="-1" role="dialog" aria-labelledby="myModalDetLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content circular">
+                <div class="modal-header circular-top mb-n4">
+                    <h5 class="modal-title" id="myModalDetLabel"><i class="mdi mdi-cart"></i>
+                        Details of the sale </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-head-fixed w3-hoverable-light" id="tblDet">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantify</th>
+                                <th scope="col">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+      graphcolumn = Highcharts.chart('container', {
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: `${new Date().getFullYear()} Sales reports`
+        },
+        subtitle: {
+          text: 'Reports by columns'
+        },
+        xAxis: {
+          categories: [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+          ],
+          crosshair: true
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Values $'
+          }
+        },
+        tooltip: {
+          headerFormat: `<span style="font-size: 10px">{point.key}</span><table>`,
+          pointFormat: `<tr><td style="color: {series.color};padding: 0">{series.name}: </td>
+                                <td style="padding: 0"><b>{point.y:.1f} $</b></td></tr>`,
+          footerFormat: `</table>`,
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+          }
+        },
+      })
+      graphpie = Highcharts.chart('container-pie', {
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: `Percentage of sales of the products of month ${new Date().getMonth() + 1} of  ${new Date().getFullYear()}`
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+        },
+        accessibility: {
+          point: {
+            valueSuffix: '%'
+          }
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+          }
+        },
+      })
+    </script>
+    <script>
+      $.widget.bridge('uibutton', $.ui.button)
+      staff = '{{ request.user.is_staff|safe }}'
+    </script>
+
+{% endblock %}

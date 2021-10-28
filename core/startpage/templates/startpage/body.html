@@ -1,0 +1,33 @@
+{% extends 'startpage/base.html' %}
+{% block body %}
+    <body class="sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+        <!-- Header -->
+        {% include 'startpage/header.html' %}
+        <!-- Sidebar -->
+        {% include 'startpage/sidebar.html' %}
+        <!-- Content -->
+        <div class="content-wrapper">
+            <div class="content px-lg-4 pt-3 px-0">
+                <div class="container-fluid w3-animate-zoom">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        {% include 'startpage/footer.html' %}
+
+    </div>
+    <!-- Block javascript -->
+    {% block javascript %}
+
+    {% endblock %}
+    </body>
+    <!--  modal-->
+    {% include 'startpage/modal_contact.html' %}
+    {% include 'startpage/modal_prod_details.html' %}
+    {% include 'startpage/shopping_cart.html' %}
+    {% include 'startpage/modal_lista.html' %}
+{% endblock %}

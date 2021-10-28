@@ -1,0 +1,215 @@
+{% extends 'baselist.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head_list %}
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui/jquery-ui.min.css' %}">
+    <script src="{% static 'lib/jquery-ui/jquery-ui.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+
+    <script src="{% static 'lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'lib/bootstrap-select/bootstrap-select.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-select/bootstrap-select.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'sale/css/style.css' %}">
+    <script src="{% static 'sale/js/form.js' %}"></script>
+{% endblock %}
+{% block content_header %}
+{#<div class="py-2"></div>#}
+{% endblock %}
+{% block content %}
+    <form method="post" id="formSale">
+        {% csrf_token %}
+{#        <div class="card circular user-select-none">#}
+            <div class="card-header circular-top border-bottom-0">
+                <h5 class="card-title font-weight-bold">
+                    {{ title }}
+                </h5>
+            </div>
+            <div class="card-body pt-1 px-0 p-sm-2">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-indigo circular">
+                            <div class="card-header circular-top">
+                                <h3 class="card-title"><i class="mdi mdi-details"></i> Product's details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select class="form-control select2 circular" name="search"></select>
+                                        <div class="input-group-append circular-left">
+                                            <button id="btnSearchProduct"
+                                                    class="btn bg-gradient-cyan input-group-btn circular-right"
+                                                    type="button">
+                                                <i class="mdi mdi-format-list-bulleted"></i> <span
+                                                    class="d-none d-sm-inline-block"> All products</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body table-responsive p-0" style="min-height: 325px;">
+                                    <table id="listTableProduct" class="table table-head-fixed w3-hoverable-light">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 5%;" class="text-center">Del</th>
+                                            <th scope="col" style="width: 30%;">Product</th>
+                                            <th scope="col" style="width: 10%;" class="text-center">Stock</th>
+                                            <th scope="col" style="width: 15%;" class="text-center">Price</th>
+                                            <th scope="col" style="width: 25%;" class="text-center">Quantify</th>
+                                            <th scope="col" style="width: 15%;" class="text-center">Subtotal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card card-indigo circular">
+                            <div class="card-header circular-top">
+                                <h3 class="card-title"><i class="mdi mdi-cart"></i> Invoice data</h3>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" name="action" value="{{ action }}">
+
+                                <div class="form-group ">
+                                    <label>Date of sale:</label>
+                                    {{ form.date_joined }}
+                                </div>
+                                <div class="form-group">
+                                    <label>Client:</label>
+                                    <div class="input-group">
+                                        {{ form.cli|add_class:'input-group-text' }}
+                                        <div class="input-group-append">
+                                            <button class="btn bg-gradient-cyan btnAddClient input-group-btn circular-right"
+                                                    type="button">
+                                                <i class="mdi mdi-account-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group-sm row">
+                                    <div class="form-group col-6">
+                                        <div class="form-group">
+                                            <p class="text-center w3-margin-bottom-7"><label>IVA:</label></p>
+                                            {{ form.iva }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <div class="form-group">
+                                            <p class="text-center w3-margin-bottom-7"><label>Subtotal:</label></p>
+                                            {{ form.subtotal }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group-sm row">
+                                    <div class="form-group col-6">
+                                        <p class="text-center w3-margin-bottom-7"><label>Calculated IVA:</label></p>
+                                        <input type="text" class="form-control-plaintext text-center" disabled readonly
+                                               name="ivacalc" value="0.0">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <p class="text-center w3-margin-bottom-7"><label>Total to pay:</label></p>
+                                        {{ form.total|add_class:'text-decoration-underline' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-inline-block px-3 pb-3 pt-1">
+                <button type="submit" class="btn bg-gradient-indigo circular">
+                    <i class="mdi mdi-content-save"></i> Save record
+                </button>
+                <a href="{{ list_url }}" class="btn bg-gradient-danger circular">
+                    <i class="mdi mdi-cancel"></i> Cancelar
+                </a>
+            </div>
+{#        </div>#}
+    </form>
+    <!-- Modal Client-->
+    <div class="modal fade" id="myModalClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="min-width: 350px">
+        <form id="myModalFormClient" class="form-horizontal" enctype="multipart/form-data" method="post">
+
+            <div class="modal-dialog modal-dialog-fromleft" role="document">
+                <div class="modal-content circular">
+                    <div class="modal-header bg-light circular-top">
+                        <h5 class="modal-title" id="myModalFormTitleClient">
+                            <b><i class="mdi mdi-plus-circle-outline"></i> Create new Client</b>
+                        </h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        {% for field in frmClient.visible_fields %}
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-2 col-form-label">{{ field.label }}:</label>
+                                <div class="col-sm-10">
+                                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer bg-light circular-bottom">
+                        <button type="submit" class="btn bg-gradient-indigo circular">
+                            <i class="mdi mdi-content-save"></i> Save Client
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Search Products -->
+    <div class="modal fade" id="myModalSearchProducts" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-popin modal-dialog-scrollable modal-dialog-top" role="document">
+            <div class="modal-content circular">
+                <div class="modal-header circular-top">
+                    <h5 class="modal-title" id="exampleModal">
+                        <b><i class="mdi mdi-magnify"></i> All availability products</b>
+                    </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body table-responsive p-0">
+                        <table id="listTableSearchProducts" class="table table-head-fixed w3-hoverable-light">
+                            <thead>
+                            <tr>
+                                <th id="sort-by-name" scope="col" style="width: 35%;cursor: pointer">Product</th>
+                                <th scope="col" style="width: 15%;" class="w3-center">Image</th>
+                                <th scope="col" style="width: 15%;" class="w3-center">Stock</th>
+                                <th scope="col" style="width: 20%;" class="w3-center">Price</th>
+                                <th scope="col" style="width: 15%;" class="w3-center">Options</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodyProduct">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      Sale.items.products = {{ det|safe }};
+      title = '{{ title|safe }}';
+    </script>
+{% endblock %}

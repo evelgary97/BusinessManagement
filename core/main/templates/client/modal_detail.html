@@ -1,0 +1,31 @@
+{% load widget_tweaks %}
+<div class="modal fade" id="myModalDetail" tabindex="-1" role="dialog" aria-labelledby="modal-slideright"
+     aria-hidden="true" style="min-width: 350px">
+    {% csrf_token %}
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-popout" role="document">
+        <div class="modal-content circular">
+            <div class="modal-header bg-gradient-teal circular-top">
+                <h5 class="modal-title" id="myModalDetailTitle">
+                    <b><i class="mdi mdi-account-details"></i> {{ entity }} details</b>
+                </h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn bg-gradient-info btn-sm circular">
+                    <i class="mdi mdi-content-copy"></i> Copy
+                </button>
+                <button class="btn bg-gradient-secondary btn-sm circular">
+                    <i class="mdi mdi-printer"></i> Print
+                </button>
+                <button class="btn bg-gradient-danger btn-sm circular">
+                    <i class="mdi mdi-cancel"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
