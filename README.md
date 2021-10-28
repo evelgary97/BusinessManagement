@@ -1,23 +1,23 @@
-### **Descripción:**
+### **Description:**
 
-Esto es un proyecto para gestionar un negocio pequeño de ventas.
+This is a project to manage a small sales business.
 
-El que interactúa con la página es el usuario, o sea el que trabaja en el local.
+The one who interacts with the page is the user, that is, the one who works on the premises.
 
-Se puede registrar productos, categorías, clientes, y por su puesto registrar ventas.
+You can register products, categories, customers, and of course sales recorder.
 
-En la página de inicio están los gráficos con las estadísticas de ventas por año y por mes.
+On the home page are the graphs with the sales statistics by year and by month.
 
-### **Implementación:**
+### **Implementation:**
 
-Está hecha en Django, ahora usa sqlite, pero se puede cambiar para postgres o mySQL. En el frontend uso AdminLte3 para
-maquetar y dar estilos, uso jQuery para controlar eventos y hacer otras funcionalidades, prácticamente todo el frontend
-está hecho con jQuery y JavaScript puro, a excepción de Django Templates como lenguaje de plantillas que lo uso para
-hacer mis templates bases, heredar de ellas, pedirle formularios y otros datos al servidor.
+It's made in Django, now it uses sqlite, but it can be changed for postgres or mySQL. On the frontend I use AdminLte3 to
+layout and styles, I use jQuery to handle events and do other functionalities, practically all the frontend
+it is made with jQuery and pure JavaScript, except for Django Templates as a template language which I use for
+make my base templates, inherit from them, request forms and other data from the server.
 
-Uso también muchos plugins como datatable, datepicker, jqueryUI, select2, etc.
+I also use many plugins like datatable, datepicker, jqueryUI, select2, etc.
 
-Uso vista basada en clases TemplateView y mediante pedidos con ajax en el frontend, gestiono los CRUD y hago todas las
-operaciones en la misma página sin actualizarla.
+I use a view based on TemplateView classes and through requests with ajax on the frontend, I manage the CRUDs and do all the
+operations on the same page without updating it.
 
-Quedaría faltando la parte de los usuarios, el login y el envío de correos, también otras funcionalidades como imprimir pdf.
+It would be missing the part of the users, the login and the sending of emails, also other functionalities such as printing pdf.
